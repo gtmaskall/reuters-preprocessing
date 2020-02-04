@@ -66,15 +66,15 @@ class tfidf:
         """
         # compute list of similarities
         num_docs = len(self.documents)
-        for doc, doc_dict in self.documents.iteritems():
+        for doc, doc_dict in self.documents.items():
             score = 0.0
-            if self.occurrences.has_key(word) and doc_dict.has_key(word):
+            if word in self.occurrences and word in doc_dict:
                 if type == 'normal':
                     score += self.normal(word, doc_dict[word], num_docs)
                 elif type == 'smooth':
                     score += self.smooth(word, doc_dict[word], num_docs)
                 else:
-                    print type, 'is not a valid td-idf function'
+                    print(f'{type} is not a valid td-idf function')
                     sys.exit(1)
                 score *= scaling
             weights[doc][word] = score

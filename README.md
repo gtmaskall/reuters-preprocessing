@@ -138,6 +138,7 @@ where `X` is replaced with 1, 2, or 3 depending on the dataset.
 
 ## Development
 * This module was developed using python 2.7.10 using the NLTK and BeautifulSoup4 modules.
+* Ported to python 3.8.1 by Guy Maskall (subject to acceptance testing).
 
 ### Contributors
 * Ankai Lou (lou.56@osu.edu)

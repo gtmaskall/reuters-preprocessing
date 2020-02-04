@@ -87,11 +87,11 @@ def tokenize(text):
     # encode unicode to string
     ascii = text.encode('ascii', 'ignore')
     # remove digits
-    no_digits = ascii.translate(None, string.digits)
+    no_digits = ascii.translate(None, string.digits.encode('ascii', 'ignore'))
     # remove punctuation
-    no_punctuation = no_digits.translate(None, string.punctuation)
+    no_punctuation = no_digits.translate(None, string.punctuation.encode('ascii', 'ignore'))
     # tokenize
-    tokens = nltk.word_tokenize(no_punctuation)
+    tokens = nltk.word_tokenize(no_punctuation.decode('ascii'))
     # remove stopwords - assume 'reuter'/'reuters' are also irrelevant
     no_stop_words = [w for w in tokens if not w in stopwords.words('english')]
     # filter out non-english words
@@ -154,7 +154,7 @@ def parse_documents():
     # generate well-formatted document set for each file
     for file in os.listdir('data'):
         # open 'reut2-XXX.sgm' file from /data directory
-        data = open(os.path.join(os.getcwd(), "data", file), 'r')
+        data = open(os.path.join(os.getcwd(), "data", file), 'rb')
         text = data.read()
         data.close()
         tree = generate_tree(text.lower())
@@ -162,7 +162,7 @@ def parse_documents():
         for reuter in tree.find_all("reuters"):
             document = generate_document(reuter)
             documents.append(document)
-        print "Finished extracting information from file:", file
+        print(f"Finished extracting information from {file}")
     return documents
 
 ###############################################################################

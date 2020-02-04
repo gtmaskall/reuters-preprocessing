@@ -30,27 +30,27 @@ def generate_csv(documents, features, weights):
         :param documents: dictionary of document objects
         :param features: sorted list of features to represent
     """
-    dataset = open(datafile, "w")
-    dataset.write('id\t')
+    dataset = open(datafile, "wb")
+    dataset.write('id\t'.encode('ascii', 'ignore'))
     for feature in features:
         dataset.write(feature)
-        dataset.write('\t')
-    dataset.write('class-label:topics\t')
-    dataset.write('class-label:places\t')
-    dataset.write('\n')
+        dataset.write('\t'.encode('ascii', 'ignore'))
+    dataset.write('class-label:topics\t'.encode('ascii', 'ignore'))
+    dataset.write('class-label:places\t'.encode('ascii', 'ignore'))
+    dataset.write('\n'.encode('ascii', 'ignore'))
     # feature vector for each document
     for i, document in enumerate(documents):
         # document id number
-        dataset.write(str(i))
-        dataset.write('\t')
+        dataset.write(str(i).encode('ascii', 'ignore'))
+        dataset.write('\t'.encode('ascii', 'ignore'))
         # each tf-idf score
         for feature in features:
-            dataset.write(str(weights[i][feature]))
-            dataset.write('\t')
+            dataset.write(str(weights[i][feature]).encode('ascii', 'ignore'))
+            dataset.write('\t'.encode('ascii', 'ignore'))
         # topics/places class labels
-        dataset.write(str(document['topics']))
-        dataset.write(str(document['places']))
-        dataset.write('\n')
+        dataset.write(str(document['topics']).encode('ascii', 'ignore'))
+        dataset.write(str(document['places']).encode('ascii', 'ignore'))
+        dataset.write('\n'.encode('ascii', 'ignore'))
     dataset.close()
 
 ###############################################################################
@@ -66,9 +66,9 @@ def select_features(weights):
         :returns: sorted list of terms representing the selected features
     """
     features = set()
-    for doc, doc_dict in weights.iteritems():
-        top = dict(sorted(doc_dict.iteritems(), key=operator.itemgetter(1), reverse=True)[:5])
-        for term, score in top.iteritems():
+    for doc, doc_dict in weights.items():
+        top = dict(sorted(doc_dict.items(), key=operator.itemgetter(1), reverse=True)[:5])
+        for term, score in top.items():
             if score > 0.0:
                 features.add(term)
     # sort set into list
@@ -114,14 +114,14 @@ def generate_dataset(documents, lexicon):
         :param documents: list of well-formatted, processable documents
         :param lexicon:   list of word stems for selecting features
     """
-    print '\nGenerating dataset @', datafile
+    print(f'\nGenerating dataset {datafile}')
     weights = generate_weights(documents, lexicon)
 
     # generate feature list
-    print 'Selecting features for the feature vectors @', datafile
+    print(f'Selecting features for the feature vectors {datafile}')
     features = select_features(weights)
 
     # write vectors to dataset1.csv
-    print 'Writing feature vector data @', datafile
+    print(f'Writing feature vector data {datafile}')
     generate_csv(documents, features, weights)
-    print 'Finished generating dataset @', datafile
+    print('Finished generating dataset {datafile}')
